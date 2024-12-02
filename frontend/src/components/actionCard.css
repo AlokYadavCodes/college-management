@@ -1,0 +1,28 @@
+.action-card{
+    padding: 16px;
+    border-radius: 14px;
+    border: 1px solid black;
+    width: 200px;
+
+    margin-left: 50px;
+}
+.action-card:hover{
+    cursor: pointer;
+    background-color: #f0f0f0;
+}
+.action-card .card-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.action-card .card-title{
+    margin-top: 5px;
+    font-size: 22px;
+    text-align: center;
+}
+.action-card .card-body{
+    margin-top: 5px;
+    font-size: 12px;
+    text-align: center;
+}
