@@ -5,41 +5,57 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="983cf36e-3826-48eb-a5f8-a116ef25614c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/postcss.config.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/ActionCard.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Admin/AdminProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Admin/FacultyTab.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Admin/StudentTab.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Faculty/FacultyProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Faculty/UploadMarks.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Faculty/UploadMaterial.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Footer/Footer.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Header/Header.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Marks.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Material.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/MyProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Notice.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Tabs.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/TimeTable.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/actionCard.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Admin.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Faculty.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/Student.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/tailwind.config.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Layout.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Material/Material.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Notice/Notice.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/components/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminFaculties.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminNotice.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminProfile.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminStudents.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminTimeTable.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyNotice.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyProfile.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyTimeTable.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyUploadMarks.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyUploadMaterial.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentMaterial.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentNotice.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentProfile.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentResult.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentTimeTable.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/store/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/store/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/eslint.config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginModal.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/ActionCard.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Admin/AdminProfile.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Admin/FacultyTab.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Admin/StudentTab.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Faculty/FacultyProfile.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Faculty/UploadMarks.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Faculty/UploadMaterial.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Footer/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Footer/Footer.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Header/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Header/Header.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LoginModal.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/RoleCard.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Marks.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Material.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/MyProfile.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Notice.jsx" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RoleCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RoleCard.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/RoleSelection.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RoleSelection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RoleSelection.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/index.css" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/index.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Tabs.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/TimeTable.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/actionCard.css" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/HomePage.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Admin.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Faculty.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Student.jsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,11 +79,14 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "git-widget-placeholder": "main",
+    "javascript.nodejs.core.library.configured.version": "18.19.1",
+    "javascript.nodejs.core.library.typings.version": "18.19.67",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "/opt/webstorm/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -91,6 +110,12 @@
       <workItem from="1731937016494" duration="3000" />
       <workItem from="1731937074691" duration="6000" />
       <workItem from="1733055465174" duration="1720000" />
+      <workItem from="1733111242365" duration="4436000" />
+      <workItem from="1733141907275" duration="2628000" />
+      <workItem from="1733291445201" duration="1481000" />
+      <workItem from="1733395457299" duration="28142000" />
+      <workItem from="1733655000680" duration="8058000" />
+      <workItem from="1733809282179" duration="2635000" />
     </task>
     <servers />
   </component>
