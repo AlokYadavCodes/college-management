@@ -1,24 +1,74 @@
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userActions } from "../store/user.js";
+import {useState} from "react";
 
-function LoginModal({ onClose }) {
-    const { role } = useSelector((state) => state.user);
+function LoginModal({role, onClose }) {
+
     const dispatch = useDispatch();
-    const { setIsLoggedInTrue } = userActions;
-
     const navigate = useNavigate();
+    const { setIsLoggedIn , setRole} = userActions;
+    const [loginData, setLoginData] = useState({
+        username: "",
+        password: "",
+    })
 
-    function handleFormSubmit(e) {
+    function onChange(e){
+        const [name, value] = [e.target.name, e.target.value]
+        setLoginData((prevData)=> (
+            {...prevData, [name]: value}
+        ))
+    }
+
+
+
+    async function handleFormSubmit(e) {
         e.preventDefault();
-        // Simulate authentication logic
-        dispatch(setIsLoggedInTrue());
-        if (role === "Student") {
+
+        try {
+            const res = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(loginData)
+            })
+            console.log(JSON.stringify(loginData))
+
+            if (!res.ok) {
+                 console.log('Login response not ok:', res.status, res.statusText)
+            }
+            const data = await res.json()
+            console.log(data)
+        } catch (error) {
+            console.log('Error in authController:', error)
+        }
+
+
+
+
+
+
+
+
+
+
+
+        dispatch(setIsLoggedIn(true));
+        dispatch(setRole(role))
+
+
+
+
+
+
+
+        if (role === "student") {
             navigate("/student");
-        } else if (role === "Faculty") {
+        } else if (role === "faculty") {
             navigate("/faculty");
-        } else if (role === "Admin") {
+        } else if (role === "admin") {
             navigate("/admin");
         }
     }
@@ -29,7 +79,6 @@ function LoginModal({ onClose }) {
                 onSubmit={handleFormSubmit}
                 className="bg-white rounded-lg shadow-lg w-11/12 max-w-lg p-6"
             >
-                {/* Header */}
                 <div className="flex justify-between items-center mb-6">
                     <h2 className="text-xl font-semibold text-gray-800">
                         Login as {role}
@@ -43,7 +92,6 @@ function LoginModal({ onClose }) {
                     </button>
                 </div>
 
-                {/* Body */}
                 <div className="space-y-4">
                     <div>
                         <label
@@ -59,6 +107,8 @@ function LoginModal({ onClose }) {
                             placeholder="Enter your username"
                             className="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg py-2 px-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             required
+                            value={loginData.username}
+                            onChange={onChange}
                         />
                     </div>
                     <div>
@@ -75,6 +125,8 @@ function LoginModal({ onClose }) {
                             placeholder="Enter your password"
                             className="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg py-2 px-3 text-sm shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
                             required
+                            value={loginData.password}
+                            onChange={onChange}
                         />
                     </div>
                     <button

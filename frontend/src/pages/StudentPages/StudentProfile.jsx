@@ -1,55 +1,67 @@
-import {Profile} from "../../components/index.js";
+import {Profile, Loading} from "../../components/index.js";
+import {useEffect, useState} from "react";
 
 function StudentProfile() {
-    return (
+    const [loading, setLoading] = useState(true);
+    const [profile, setProfile] = useState({
+        name: null,
+        dob: null,
+        fatherName: null,
+        email: null,
+        contactNo: null,
+        parentContactNo: null,
+        branchName: null,
+        semesterNumber: null,
+    })
+    useEffect(() => {
+        setLoading(true)
+        fetch('/api/student/profile', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: 1
+            })
+        })
+            .then(res => res.json())
+            .then(profile => {
+                setProfile(profile)
+            })
+            .catch(err => console.log(`Error in fetching profile: ${err.message}`))
+            .finally(() => setLoading(false))
+    }, [])
+    return loading ? <Loading/> : (
         <>
-            <Profile/>
+            <Profile profile={profile}/>
 
 
-            <div className="bg-white overflow-hidden shadow rounded-lg border">
-                <div className="px-4 py-5 sm:px-6">
-                    <h3 className="text-lg leading-6 font-medium text-gray-900">
-                        Hello, Alok
-                    </h3>
-                    <p className="mt-1 max-w-2xl text-sm text-gray-500">
-                        Here are your profile details:
-                    </p>
+            <div className="mx-10 bg-white overflow-hidden shadow-lg rounded-lg border border-gray-300">
+                <div className="px-6 py-5 bg-gradient-to-r from-blue-500 to-indigo-500 text-white">
+                    <h3 className="text-xl font-semibold">Other details:</h3>
+                    <p className="mt-1 text-sm">Here are other details:</p>
                 </div>
-                <div className="border-t border-gray-200 px-4 py-5 sm:p-0">
-                    <dl className="sm:divide-y sm:divide-gray-200">
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-medium text-gray-500">
-                                Full name
-                            </dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                John Doe
-                            </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-medium text-gray-500">
-                                Email address
-                            </dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                johndoe@example.com
-                            </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-medium text-gray-500">
-                                Phone number
-                            </dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                (123) 456-7890
-                            </dd>
-                        </div>
-                        <div className="py-3 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                            <dt className="text-sm font-medium text-gray-500">
-                                Address
-                            </dt>
-                            <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                                123 Main St<br/>
-                                USA 12345
-                            </dd>
-                        </div>
+                <div className="border-t border-gray-200 px-6 py-5">
+                    <dl className="divide-y divide-gray-200">
+                        {[
+                            {label: "Name", value: profile.name},
+                            {label: "Branch", value: profile.branchName},
+                            {label: "Semester", value: profile.semesterNumber},
+                        ].map((item, idx) => (
+                            <div
+                                key={item.label}
+                                className={`py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0 ${
+                                    idx % 2 === 0 ? "bg-gray-50" : "bg-white"
+                                }`}
+                            >
+                                <dt className="text-sm font-medium text-gray-700 hover:text-blue-500">
+                                    {item.label}
+                                </dt>
+                                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+                                    {item.value}
+                                </dd>
+                            </div>
+                        ))}
                     </dl>
                 </div>
             </div>

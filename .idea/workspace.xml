@@ -5,62 +5,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="983cf36e-3826-48eb-a5f8-a116ef25614c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Layout.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Material/Material.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Notice/Notice.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/components/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminFaculties.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminNotice.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminStudents.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/AdminPages/AdminTimeTable.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyNotice.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyTimeTable.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyUploadMarks.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/FacultyPages/FacultyUploadMaterial.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentMaterial.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentNotice.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentProfile.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentResult.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentTimeTable.jsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/store/index.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/frontend/src/store/user.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/controllers/authController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/controllers/studentController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/controllers/userController.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/models/authModel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/models/studentModel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/models/userModel.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/routes/authRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/routes/studentRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/backend/src/routes/userRoutes.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentDashboard.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/StudentRegistration.jsx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/frontend/src/pages/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/eslint.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/eslint.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/backend/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/backend/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/src/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/App.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/App.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/ActionCard.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Admin/AdminProfile.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Admin/FacultyTab.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Admin/StudentTab.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Faculty/FacultyProfile.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Faculty/UploadMarks.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Faculty/UploadMaterial.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Footer/Footer.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Footer/Footer.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Header/Header.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Header/Header.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Layout.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Layout.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/LoginModal.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/LoginModal.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Marks.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Material.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/MyProfile.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Notice.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/RoleCard.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RoleCard.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Navbar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Profile/Profile.jsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/components/RoleSelection.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/RoleSelection.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/Tabs.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/TimeTable.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/components/actionCard.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/Sidebar.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/components/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/components/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/frontend/src/main.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/main.jsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Admin.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Faculty.jsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/frontend/src/pages/Student.jsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/HomePage.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/Login.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentProfile.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentProfile.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentResult.jsx" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/pages/StudentPages/StudentResult.jsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/frontend/src/store/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/store/user.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -86,8 +67,14 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode",
     "ts.external.directory.path": "/opt/webstorm/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "mysql"
+    ]
   }
 }]]></component>
   <component name="SharedIndexes">

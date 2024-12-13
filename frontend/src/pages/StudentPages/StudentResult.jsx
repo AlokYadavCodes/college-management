@@ -1,125 +1,169 @@
+import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
+import {Loading} from "../../components/index.js";
+
 function StudentResult() {
-    return (
-        <div>
-            <div className="mt-2 text-center text-xl bg-slate-100 py-1">
-                <label htmlFor="semester" className='mr-1'>Select Semester: </label>
-                <select id='semester' className='bg-white border border-gray-200 rounded-lg'>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
+    const [loading, setLoading] = useState(true);
+    const [semester, setSemester] = useState(1);
+    const [options, setOptions] = useState([1]);
+    const userId = useSelector(state => state.user.id)
+    const [result, setResult] = useState({
+        subjects: [{
+            name: null,
+            maxMarks: null,
+            obtainedMarks: null,
+            resultStatus: null
+        }],
+        grandTotal: null,
+        totalObtainedMarks: null,
+        percentage: null,
+        resultStatus: null,
+        totalSubjects: null,
+    })
+
+    useEffect(() => {
+        setLoading(true)
+        fetch('/api/student/semesters', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: 1
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                setOptions(data.semesters)
+            })
+            .catch(err => console.log(`Error in fetching semesters: ${err.message}`))
+            .finally(() => setLoading(false))
+    }, [userId]);
+
+    useEffect(() => {
+        setLoading(true)
+
+        async function fetchResult() {
+            console.log(`inside fetch result`)
+            try {
+                const res = await fetch('/api/student/result/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: 1,
+                        semester
+                    })
+                })
+                if (!res.ok) {
+                    console.log(`Fetch result response not ok: ${res.status}`)
+                }
+                const result = await res.json()
+                console.log(result)
+                setResult(result)
+
+            } catch (error) {
+                console.log('Error in fetching result:', error)
+            } finally {
+                setLoading(false)
+            }
+
+        }
+
+        fetchResult()
+    }, [semester, userId])
+
+    return loading ? <Loading/> : (
+        <div className="bg-gray-100 min-h-screen p-6">
+            {/* Semester Selector */}
+            <div className="text-center bg-white shadow-md rounded-lg p-4">
+                <label htmlFor="semester" className="mr-2 text-lg font-medium text-gray-700">
+                    Select Semester:
+                </label>
+                <select
+                    id="semester"
+                    onChange={(e) => {
+                        setSemester(Number(e.target.value))
+                    }}
+                    value={semester}
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
+                >
+                    {options.map((option) => (
+                        <option key={option} value={option}>{option}</option>
+                    ))
+                    }
                 </select>
-                    <button className='ml-8 bg-blue-600 hover:bg-blue-500 text-white px-2 rounded-lg'>Submit</button>
             </div>
 
-            <div className="my-2 mx-4 px-4 py-2 border flex justify-around ">
-                <div className="space-y-2">
-                    <div className="flex">
-                        <p className="w-36 font-bold">Semester</p>
-                        <p>: 4</p>
-                    </div>
-                    <div className="flex">
-                        <p className="w-36 font-bold">Total Subjects</p>
-                        <p>: 8</p>
-                    </div>
-                    <div className="flex">
-                        <p className="w-36 font-bold">Result Status</p>
-                        <p>: Pass</p>
+            {/* Summary Section */}
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-white shadow-md rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Summary</h3>
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <p className="text-gray-500 font-medium">Semester</p>
+                            <p className="text-gray-800">{semester}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className="text-gray-500 font-medium">Total Subjects</p>
+                            <p className="text-gray-800">{result.totalSubjects}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className="text-gray-500 font-medium">Result Status</p>
+                            <p className="text-green-600 font-bold">{result.resultStatus}</p>
+                        </div>
                     </div>
                 </div>
 
-                <div className="space-y-2">
-                    <div className="flex">
-                        <p className="w-44 font-bold">Maximum Marks</p>
-                        <p>: 400</p>
-                    </div>
-                    <div className="flex">
-                        <p className="w-44 font-bold">Obtained Marks</p>
-                        <p>: 899</p>
-                    </div>
-                    <div className="flex">
-                        <p className="w-44 font-bold">Percentage</p>
-                        <p>: 93%</p>
+                <div className="bg-white shadow-md rounded-lg p-4">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-4">Performance</h3>
+                    <div className="space-y-2">
+                        <div className="flex justify-between">
+                            <p className="text-gray-500 font-medium">Grand Total</p>
+                            <p className="text-gray-800">{result.grandTotal}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className="text-gray-500 font-medium">Total Obtained Marks</p>
+                            <p className="text-gray-800">{result.totalObtainedMarks}</p>
+                        </div>
+                        <div className="flex justify-between">
+                            <p className="text-gray-500 font-medium">Percentage</p>
+                            <p className="text-blue-600 font-bold">{result.percentage}%</p>
+                        </div>
                     </div>
                 </div>
-
             </div>
 
-
-            <div className='mx-4 my-3'>
-                <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-                    <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead
-                            className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            {/* Detailed Result Table */}
+            <div className="mt-6">
+                <div className="relative overflow-x-auto shadow-lg rounded-lg">
+                    <table className="w-full text-sm text-left text-gray-500">
+                        <thead className="bg-gray-50 text-gray-700 uppercase text-xs">
                         <tr>
-                            <th scope="col" className="px-6 py-3">
-                                Subject
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Maximum Marks
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Obtained Marks
-                            </th>
-                            <th scope="col" className="px-6 py-3">
-                                Result
-                            </th>
+                            <th scope="col" className="px-6 py-3">Subject</th>
+                            <th scope="col" className="px-6 py-3">Maximum Marks</th>
+                            <th scope="col" className="px-6 py-3">Obtained Marks</th>
+                            <th scope="col" className="px-6 py-3">Result</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Apple MacBook Pro 17"
-                            </th>
-                            <td className="px-6 py-4">
-                                Silver
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop
-                            </td>
-                            <td className="px-6 py-4">
-                                $2999
-                            </td>
-                        </tr>
-                        <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Microsoft Surface Pro
-                            </th>
-                            <td className="px-6 py-4">
-                                White
-                            </td>
-                            <td className="px-6 py-4">
-                                Laptop PC
-                            </td>
-                            <td className="px-6 py-4">
-                                $1999
-                            </td>
-                        </tr>
-                        <tr className="bg-white dark:bg-gray-800">
-                            <th scope="row"
-                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                Magic Mouse 2
-                            </th>
-                            <td className="px-6 py-4">
-                                Black
-                            </td>
-                            <td className="px-6 py-4">
-                                Accessories
-                            </td>
-                            <td className="px-6 py-4">
-                                $99
-                            </td>
-                        </tr>
+                        {
+                            result.subjects.map(subject => (
+                                <tr key={subject.name} className="bg-white border-b hover:bg-gray-50">
+                                    <td className="px-6 py-4 text-gray-800">{subject.name}</td>
+                                    <td className="px-6 py-4">{subject.maxMarks}</td>
+                                    <td className="px-6 py-4">{subject.obtainedMarks}</td>
+                                    <td className="px-6 py-4 text-green-600">{subject.resultStatus}</td>
+                                </tr>
+                            ))
+                        }
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-    )
+    );
 }
 
 export default StudentResult;

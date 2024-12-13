@@ -1,115 +1,95 @@
+import { useState } from "react";
+import { NavLink } from "react-router-dom";
+import { FaUser, FaTable, FaClipboardList, FaFileAlt, FaBullhorn, FaSignOutAlt, FaUpload, FaUsers, FaUniversity } from 'react-icons/fa';
 import {useSelector} from "react-redux";
-import {NavLink} from "react-router-dom";
 
-function Sidebar({currentTab, setCurrentTab}) {
-    let tabs=[];
-    const {role} = useSelector((state) => state.user);
-    if (role==="Student"){
-        tabs = [
-            {
-                name: 'Profile',
-                slug: 'profile',
-            },
-            {
-                name: 'Time Table',
-                slug: 'time-table',
-            },
-            {
-                name: 'Result',
-                slug: 'result',
-            },
-            {
-                name: 'Material',
-                slug: 'material',
-            },
-            {
-                name: 'Notice',
-                slug: 'notice',
-            },
-        ]
-    } else if (role==="Faculty"){
-        tabs = [
-            {
-                name: 'Profile',
-                slug: 'profile',
-            },
-            {
-                name: 'Upload Marks',
-                slug: 'upload-marks',
-            },
-            {
-                name: 'Upload Material',
-                slug: 'upload-material',
-            },
-            {
-                name: 'Time Table',
-                slug: 'time-table',
-            },
-            {
-                name: 'Notice',
-                slug: 'notice',
-            },
-        ]
-    } else if (role==="Admin"){
-        tabs = [
-            {
-                name: 'Profile',
-                slug: 'profile',
-            },
-            {
-                name: 'Students',
-                slug: 'students',
-            },
-            {
-                name: 'Faculties',
-                slug: 'faculties',
-            },
-            {
-                name: 'Time Table',
-                slug: 'time-table',
-            },
-            {
-                name: 'Upload Notice',
-                slug: 'notice',
-            },
-        ]
+function Sidebar() {
+    const [isOpen, setIsOpen] = useState(false);
+    const {role}= useSelector((state) => state.user);
 
+    const toggleSidebar = () => setIsOpen(!isOpen);
+
+    // Define the tabs for each role
+    let tabs = [];
+    if (role === "student") {
+        tabs = [
+            { name: 'Profile', slug: 'profile', icon: <FaUser className="text-xl" /> },
+            { name: 'Time Table', slug: 'time-table', icon: <FaTable className="text-xl" /> },
+            { name: 'Result', slug: 'result', icon: <FaClipboardList className="text-xl" /> },
+            { name: 'Material', slug: 'material', icon: <FaFileAlt className="text-xl" /> },
+            { name: 'Notice', slug: 'notice', icon: <FaBullhorn className="text-xl" /> },
+        ];
+    } else if (role === "faculty") {
+        tabs = [
+            { name: 'Profile', slug: 'profile', icon: <FaUser className="text-xl" /> },
+            { name: 'Upload Marks', slug: 'upload-marks', icon: <FaUpload className="text-xl" /> },
+            { name: 'Upload Material', slug: 'upload-material', icon: <FaUpload className="text-xl" /> },
+            { name: 'Time Table', slug: 'time-table', icon: <FaTable className="text-xl" /> },
+            { name: 'Notice', slug: 'notice', icon: <FaBullhorn className="text-xl" /> },
+        ];
+    } else if (role === "admin") {
+        tabs = [
+            { name: 'Profile', slug: 'profile', icon: <FaUser className="text-xl" /> },
+            { name: 'Students', slug: 'students', icon: <FaUsers className="text-xl" /> },
+            { name: 'Faculties', slug: 'faculties', icon: <FaUniversity className="text-xl" /> },
+            { name: 'Time Table', slug: 'time-table', icon: <FaTable className="text-xl" /> },
+            { name: 'Upload Notice', slug: 'notice', icon: <FaBullhorn className="text-xl" /> },
+        ];
     }
 
     return (
-        <aside id="logo-sidebar"
-               className="fixed top-0 left-0 z-40 w-64 h-screen pt-20 transition-transform -translate-x-full bg-white border-r border-gray-200 sm:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
-               aria-label="Sidebar">
-            <div className="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
-                <ul className="space-y-2 font-medium">
+        <div className="flex h-screen sticky top-0">
+            <div
+                className={`bg-gray-800 text-white transition-all duration-300 ease-in-out ${isOpen ? 'w-64' : 'w-20'} h-full p-4 flex flex-col rounded-br-2xl shadow-md`}
+            >
+                <div className="flex items-center justify-between mb-4">
+                    <div className="flex items-center space-x-3">
+                        {isOpen && <span className="text-xl font-semibold"></span>}
+                        <button
+                            onClick={toggleSidebar}
+                            className="text-white text-3xl focus:outline-none"
+                        >
+                            {isOpen ? "×" : "☰"}
+                        </button>
+                    </div>
+                </div>
 
-                    {tabs.map(tab=> (
-                        <li key={tab.name+role}>
-                            <NavLink
-                                to={`/${role.toLowerCase()}/${tab.slug}`}
+                {/* Sidebar Menu */}
+                <nav className="space-y-6 mt-4">
+                    <ul>
+                        {tabs.map((tab) => (
+                            <li key={tab.slug}>
+                                <NavLink
+                                    to={`/${role.toLowerCase()}/${tab.slug}`}
+                                    className={({ isActive }) =>
+                                        `flex items-center p-3 rounded-lg transition-all duration-300 ${
+                                            isActive ? 'bg-white text-blue-500' : 'text-gray-200 hover:bg-gray-700 hover:text-white'
+                                        }`}
+                                >
+                                    {tab.icon}
+                                    {isOpen && <span className="ml-4 text-lg">{tab.name}</span>}
+                                </NavLink>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
 
-                                className={({ isActive }) =>
-                                    `${isActive && 'bg-blue-500'} flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group`
-                                }
-                            >
-                                <svg
-                                    className="w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
-                                    aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
-                                    viewBox="0 0 22 21">
-                                    <path
-                                        d="M16.975 11H10V4.025a1 1 0 0 0-1.066-.998 8.5 8.5 0 1 0 9.039 9.039.999.999 0 0 0-1-1.066h.002Z"/>
-                                    <path
-                                        d="M12.5 0c-.157 0-.311.01-.565.027A1 1 0 0 0 11 1.02V10h8.975a1 1 0 0 0 1-.935c.013-.188.028-.374.028-.565A8.51 8.51 0 0 0 12.5 0Z"/>
-                                </svg>
-                                <span className="ms-3">{tab.name}</span>
-                            </NavLink>
-                        </li>
-                    ))}
-                </ul>
+                {/* Sidebar footer with Logout */}
+                <div className="mt-auto">
+                    <NavLink
+                        to="/logout"
+                        className={({ isActive }) =>
+                            `flex items-center w-full text-lg p-3 rounded-lg transition-all duration-300 ${
+                                isActive ? 'bg-red-600 text-white' : 'text-red-200 hover:bg-red-500'
+                            }`}
+                    >
+                        <FaSignOutAlt className="text-xl" />
+                        {isOpen && <span className="ml-4 text-lg">Logout</span>}
+                    </NavLink>
+                </div>
             </div>
-        </aside>
-
-    )
+        </div>
+    );
 }
 
 export default Sidebar;

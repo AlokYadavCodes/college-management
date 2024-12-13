@@ -1,172 +1,192 @@
-import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-// import axios from "axios";
+import React, {useEffect, useState} from "react";
 
 function FacultyUploadMarks() {
-    const { userId } = useSelector(state => state.user); // Assume Redux has the logged-in faculty's ID.
-    // const [sections, setSections] = useState([]);
-    // const [selectedSection, setSelectedSection] = useState("");
-    // const [subjects, setSubjects] = useState([]);
-    // const [selectedSubject, setSelectedSubject] = useState("");
-    // const [students, setStudents] = useState([]);
-    // const [marks, setMarks] = useState({});
-    // const [isLoading, setIsLoading] = useState(false);
-    //
-    // // Fetch allowed sections when component mounts
-    // useEffect(() => {
-    //     async function fetchSections() {
-    //         try {
-    //             const { data } = await axios.get(`/api/sections/${userId}`);
-    //             setSections(data);
-    //         } catch (error) {
-    //             console.error("Error fetching sections:", error);
-    //         }
-    //     }
-    //     fetchSections();
-    // }, [userId]);
-    //
-    // // Fetch subjects when a section is selected
-    // useEffect(() => {
-    //     async function fetchSubjects() {
-    //         if (!selectedSection) return;
-    //         try {
-    //             const { data } = await axios.get(`/api/subjects/${userId}?section=${selectedSection}`);
-    //             setSubjects(data);
-    //         } catch (error) {
-    //             console.error("Error fetching subjects:", error);
-    //         }
-    //     }
-    //     fetchSubjects();
-    // }, [selectedSection, userId]);
-    //
-    // // Fetch students when a subject is selected
-    // useEffect(() => {
-    //     async function fetchStudents() {
-    //         if (!selectedSubject) return;
-    //         try {
-    //             const { data } = await axios.get(`/api/students?section=${selectedSection}`);
-    //             setStudents(data);
-    //             // Initialize marks for students
-    //             const initialMarks = {};
-    //             data.forEach(student => {
-    //                 initialMarks[student.id] = ""; // Default mark as an empty string
-    //             });
-    //             setMarks(initialMarks);
-    //         } catch (error) {
-    //             console.error("Error fetching students:", error);
-    //         }
-    //     }
-    //     fetchStudents();
-    // }, [selectedSection, selectedSubject]);
-    //
-    // // Handle mark changes for each student
-    // const handleMarkChange = (studentId, value) => {
-    //     setMarks(prev => ({
-    //         ...prev,
-    //         [studentId]: value,
-    //     }));
-    // };
-    //
-    // // Submit marks
-    // const handleSubmit = async () => {
-    //     setIsLoading(true);
-    //     try {
-    //         await axios.post("/api/marks", {
-    //             section: selectedSection,
-    //             subject: selectedSubject,
-    //             marks,
-    //         });
-    //         alert("Marks submitted successfully!");
-    //     } catch (error) {
-    //         console.error("Error submitting marks:", error);
-    //         alert("Failed to submit marks.");
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // };
+
+    const [branchOptions, setBranchOptions] = useState([]);
+    const [branchId, setBranchId] = useState(0);
+
+    const [semesterOptions, setSemesterOptions] = useState([]);
+    const [semesterId, setSemesterId] = useState("");
+
+    const [subjectOptions, setSubjectOptions] = useState([]);
+    const [subjectId, setSubjectId] = useState(0);
+
+    const [students, setStudents] = useState([
+        {id: 1, name: "Student A", roll: "101", marks: ""},
+        {id: 2, name: "Student B", roll: "102", marks: 85},
+        {id: 3, name: "Student C", roll: "103", marks: ""},
+    ]);
+    const [searchQuery, setSearchQuery] = useState("");
+
+    useEffect(() => {
+        fetch('/api/faculty/branches', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: 3
+            })
+        })
+            .then(res => res.json())
+            .then((data) => setBranchOptions(data))
+    })
+
+    const handleMarksChange = (studentId, marks) => {
+        setStudents((prev) =>
+            prev.map((student) =>
+                student.id === studentId ? {...student, marks} : student
+            )
+        );
+    };
+
+    const handleSubmitMarks = () => {
+        console.log("Uploaded Marks:", students);
+        alert("Marks uploaded successfully!");
+    };
+
+    const filteredStudents = students.filter((student) =>
+        student.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    // Check if all options are selected
+    const isFormValid = branch && semester && subject;
 
     return (
-        <p>faculty upload marks</p>
-        // <div className="upload-marks-container p-4">
-        //     <h2 className="text-xl font-bold mb-4">Upload Marks</h2>
-        //
-        //     {/* Section Selector */}
-        //     <div className="mb-4">
-        //         <label className="block mb-1">Select Section</label>
-        //         <select
-        //             value={selectedSection}
-        //             onChange={(e) => setSelectedSection(e.target.value)}
-        //             className="p-2 border rounded w-full"
-        //         >
-        //             <option value="">-- Select Section --</option>
-        //             {sections.map(section => (
-        //                 <option key={section.id} value={section.id}>{section.name}</option>
-        //             ))}
-        //         </select>
-        //     </div>
-        //
-        //     {/* Subject Selector */}
-        //     {selectedSection && (
-        //         <div className="mb-4">
-        //             <label className="block mb-1">Select Subject</label>
-        //             <select
-        //                 value={selectedSubject}
-        //                 onChange={(e) => setSelectedSubject(e.target.value)}
-        //                 className="p-2 border rounded w-full"
-        //             >
-        //                 <option value="">-- Select Subject --</option>
-        //                 {subjects.map(subject => (
-        //                     <option key={subject.id} value={subject.id}>{subject.name}</option>
-        //                 ))}
-        //             </select>
-        //         </div>
-        //     )}
-        //
-        //     {/* Student List */}
-        //     {selectedSubject && students.length > 0 && (
-        //         <div className="mb-4">
-        //             <h3 className="text-lg font-bold mb-2">Enter Marks for Students</h3>
-        //             <table className="table-auto w-full border">
-        //                 <thead>
-        //                 <tr>
-        //                     <th className="border px-4 py-2">Roll No</th>
-        //                     <th className="border px-4 py-2">Name</th>
-        //                     <th className="border px-4 py-2">Marks</th>
-        //                 </tr>
-        //                 </thead>
-        //                 <tbody>
-        //                 {students.map(student => (
-        //                     <tr key={student.id}>
-        //                         <td className="border px-4 py-2">{student.rollNo}</td>
-        //                         <td className="border px-4 py-2">{student.name}</td>
-        //                         <td className="border px-4 py-2">
-        //                             <input
-        //                                 type="number"
-        //                                 value={marks[student.id]}
-        //                                 onChange={(e) => handleMarkChange(student.id, e.target.value)}
-        //                                 className="p-2 border rounded w-full"
-        //                             />
-        //                         </td>
-        //                     </tr>
-        //                 ))}
-        //                 </tbody>
-        //             </table>
-        //         </div>
-        //     )}
-        //
-        //     {/* Submit Button */}
-        //     {selectedSubject && students.length > 0 && (
-        //         <div className="mt-4">
-        //             <button
-        //                 onClick={handleSubmit}
-        //                 disabled={isLoading}
-        //                 className={`bg-blue-500 text-white p-2 rounded ${isLoading ? "opacity-50" : "hover:bg-blue-600"}`}
-        //             >
-        //                 {isLoading ? "Submitting..." : "Submit Marks"}
-        //             </button>
-        //         </div>
-        //     )}
-        // </div>
+        <div className="min-h-screen bg-gray-100 p-6">
+            <h1 className="text-2xl font-semibold text-center text-gray-800 mb-6">
+                Faculty: Upload Marks
+            </h1>
+
+            <div className="grid grid-cols-1 lg:grid-cols-1 gap-6">
+                {/* Input Details Box */}
+                <div className="bg-white shadow-lg rounded-lg p-6">
+                    <h2 className="text-lg font-medium text-gray-700 mb-4">Details</h2>
+                    <div className="space-y-4 flex flex-col">
+                        {/* Branch Selection */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700" htmlFor="branch">
+                                Branch
+                            </label>
+                            <select
+                                id="branch"
+                                value={branch}
+                                onChange={(e) => setBranch(e.target.value)}
+                                className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                <option value="">-- Select Branch --</option>
+                                <option value="CSE">Computer Science</option>
+                                <option value="ECE">Electronics</option>
+                                <option value="MECH">Mechanical</option>
+                            </select>
+                        </div>
+
+                        {/* Semester Selection */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700" htmlFor="semester">
+                                Semester
+                            </label>
+                            <select
+                                id="semester"
+                                value={semester}
+                                onChange={(e) => setSemester(e.target.value)}
+                                className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                <option value="">-- Select Semester --</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                            </select>
+                        </div>
+
+                        {/* Subject Selection */}
+                        <div>
+                            <label className="block text-sm font-medium text-gray-700" htmlFor="subject">
+                                Subject
+                            </label>
+                            <select
+                                id="subject"
+                                value={subject}
+                                onChange={(e) => setSubject(e.target.value)}
+                                className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                <option value="">-- Select Subject --</option>
+                                <option value="Math">Math</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Students List Box */}
+                {isFormValid && (
+                    <div className="bg-white shadow-lg rounded-lg p-6">
+                        <h2 className="text-lg font-medium text-gray-700 mb-4">Students</h2>
+
+                        {/* Search Bar */}
+                        <div className="mb-4">
+                            <input
+                                type="text"
+                                placeholder="Search by name"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                            />
+                        </div>
+
+                        {/* Student List Table */}
+                        <div className="overflow-x-auto">
+                            <table className="w-full text-left border-collapse">
+                                <thead>
+                                <tr className="bg-gray-50 text-gray-700 uppercase text-sm">
+                                    <th className="px-4 py-2 border">Roll Number</th>
+                                    <th className="px-4 py-2 border">Name</th>
+                                    <th className="px-4 py-2 border">Marks</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {filteredStudents.map((student) => (
+                                    <tr key={student.id} className="border-b hover:bg-gray-50">
+                                        <td className="px-4 py-2 border">{student.roll}</td>
+                                        <td className="px-4 py-2 border">{student.name}</td>
+                                        <td className="px-4 py-2 border">
+                                            {student.marks !== "" ? (
+                                                <span className="text-green-500 font-medium">
+                                                        {student.marks} (Submitted)
+                                                    </span>
+                                            ) : (
+                                                <input
+                                                    type="number"
+                                                    value={student.marks || ""}
+                                                    onChange={(e) =>
+                                                        handleMarksChange(student.id, e.target.value)
+                                                    }
+                                                    className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
+                                                    placeholder="Enter Marks"
+                                                />
+                                            )}
+                                        </td>
+                                    </tr>
+                                ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Submit Button */}
+                        <div className="mt-4 text-right">
+                            <button
+                                onClick={handleSubmitMarks}
+                                className="px-6 py-2 bg-green-600 text-white font-medium rounded-lg hover:bg-green-500 focus:ring focus:ring-green-300"
+                            >
+                                Submit Marks
+                            </button>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
     );
 }
 

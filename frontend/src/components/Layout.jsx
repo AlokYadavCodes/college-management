@@ -1,21 +1,19 @@
 import Navbar from "./Navbar.jsx";
 import Sidebar from "./Sidebar.jsx";
-import Footer from "./Footer/Footer.jsx";
+import {Outlet} from "react-router-dom";
 
-function Layout({ children }) {
+function Layout() {
     return (
-        <>
-            <Navbar />
-            <div className='flex '>
-                <Sidebar/>
-                <div className='ml-64 w-[calc(100%-16rem)] mt-14'>
-                    <div>
-                        {children}
-                        {/*<Footer/>*/}
-                    </div>
+        <div className="flex">
+            <Sidebar/>
+            <div className="flex-1 bg-gray-100">
+                <Navbar/>
+                <div className="container mx-auto">
+                    <Outlet/>
                 </div>
             </div>
-        </>
+        </div>
+
     )
 }
 

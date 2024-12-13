@@ -4,25 +4,16 @@ const userSlice = createSlice({
     name: "user",
     initialState: {
         isLoggedIn: false,
+        name: null,
         role: null,
     },
     reducers: {
-        setIsLoggedInTrue: (state, action) => {
-            state.isLoggedIn = true;
-            console.log('value is set to true')
+        setIsLoggedIn: (state, action) => {
+            state.isLoggedIn = action.payload;
         },
-        setIsLoggedInFalse: (state, action) => {
-            state.isLoggedIn = false;
-        },
-        setRoleAsStudent: (state, action) => {
-            state.role = "Student"
-        },
-        setRoleAsFaculty: (state, action) => {
-            state.role = "Faculty"
-        },
-        setRoleAsAdmin: (state, action) => {
-            state.role = "Admin"
-        },
+        setRole: (state, action) => {
+            state.role = action.payload.toLowerCase();
+        }
     }
 })
 
