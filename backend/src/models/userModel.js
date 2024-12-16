@@ -10,6 +10,11 @@ export const usernameExists = async (username) => {
     return rows.length !== 0;
 }
 
+export const emailExists = async (email) => {
+    const [rows] = await db.execute('SELECT 1 FROM users WHERE email = ?', [email])
+    return rows.length !== 0;
+}
+
 export const getUserProfile = async (userId) => {
     const [userDetail] = await db.execute('SELECT name, dob, father_name as fatherName, email, contact_no as contactNo, parent_contact_no as parentContactNo, address FROM users WHERE id = ?', [userId])
     return userDetail[0];

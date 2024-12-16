@@ -17,7 +17,6 @@ export const result = async (req, res) => {
 }
 
 export const profile = async (req, res) => {
-    console.log(`inside profile`)
     const {userId} = req.body;
     const userProfile = await getUserProfile(userId)
     const studentProfile = await getStudentProfile(userId)

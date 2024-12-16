@@ -1,26 +1,27 @@
-import { IoClose } from "react-icons/io5";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { userActions } from "../store/user.js";
+import {IoClose} from "react-icons/io5";
+import {useNavigate} from "react-router-dom";
+import {useDispatch} from "react-redux";
+import {userActions} from "../store/user.js";
 import {useState} from "react";
+import {toast} from "react-toastify";
 
-function LoginModal({role, onClose }) {
+function LoginModal({role, onClose}) {
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { setIsLoggedIn , setRole} = userActions;
+    const {setIsLoggedIn, setName, setRole, setUserId} = userActions;
     const [loginData, setLoginData] = useState({
         username: "",
         password: "",
+        role,
     })
 
-    function onChange(e){
+    function onChange(e) {
         const [name, value] = [e.target.name, e.target.value]
-        setLoginData((prevData)=> (
+        setLoginData((prevData) => (
             {...prevData, [name]: value}
         ))
     }
-
 
 
     async function handleFormSubmit(e) {
@@ -34,42 +35,27 @@ function LoginModal({role, onClose }) {
                 },
                 body: JSON.stringify(loginData)
             })
-            console.log(JSON.stringify(loginData))
-
             if (!res.ok) {
-                 console.log('Login response not ok:', res.status, res.statusText)
+                console.log('Login response not ok:', res.status, res.statusText)
             }
             const data = await res.json()
-            console.log(data)
+
+            res.ok ? toast.success(`Welcome, ${data.name}`) : toast.error(data.message)
+
+            dispatch(setIsLoggedIn(true));
+            dispatch(setRole(data.role))
+            dispatch(setUserId(data.id))
+            dispatch(setName(data.name))
+
+            if (role === "student") {
+                navigate("/student");
+            } else if (role === "faculty") {
+                navigate("/faculty");
+            } else if (role === "admin") {
+                navigate("/admin");
+            }
         } catch (error) {
             console.log('Error in authController:', error)
-        }
-
-
-
-
-
-
-
-
-
-
-
-        dispatch(setIsLoggedIn(true));
-        dispatch(setRole(role))
-
-
-
-
-
-
-
-        if (role === "student") {
-            navigate("/student");
-        } else if (role === "faculty") {
-            navigate("/faculty");
-        } else if (role === "admin") {
-            navigate("/admin");
         }
     }
 
@@ -88,7 +74,7 @@ function LoginModal({role, onClose }) {
                         onClick={onClose}
                         className="text-gray-500 hover:text-gray-800 text-2xl"
                     >
-                        <IoClose />
+                        <IoClose/>
                     </button>
                 </div>
 

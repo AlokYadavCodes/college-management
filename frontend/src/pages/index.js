@@ -17,5 +17,28 @@ import FacultyProfile from "./FacultyPages/FacultyProfile.jsx";
 import Login from "./Login.jsx";
 import StudentRegistration from "./StudentRegistration.jsx";
 import StudentDashboard from "./StudentPages/StudentDashboard.jsx";
+import AdminDashboard from "./AdminPages/AdminDashboard.jsx";
+import PendingRegistrationRequest from "./AdminPages/PendingRegistrationRequest.jsx";
 
-export {StudentDashboard, StudentRegistration, AdminFaculties, AdminNotice, AdminProfile, AdminStudents, AdminTimeTable, StudentProfile, StudentTimeTable, StudentResult, StudentNotice, StudentMaterial, FacultyUploadMarks, FacultyUploadMaterial, FacultyNotice, FacultyTimeTable, FacultyProfile, Login};
+export {
+    AdminDashboard,
+    StudentDashboard,
+    StudentRegistration,
+    AdminFaculties,
+    AdminNotice,
+    AdminProfile,
+    AdminStudents,
+    AdminTimeTable,
+    StudentProfile,
+    StudentTimeTable,
+    StudentResult,
+    StudentNotice,
+    StudentMaterial,
+    FacultyUploadMarks,
+    FacultyUploadMaterial,
+    FacultyNotice,
+    FacultyTimeTable,
+    FacultyProfile,
+    Login,
+    PendingRegistrationRequest,
+};

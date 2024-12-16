@@ -4,6 +4,7 @@ import userRoutes from './routes/userRoutes.js';
 import studentRoutes from "./routes/studentRoutes.js";
 import facultyRoutes from "./routes/facultyRoutes.js";
 import adminRoutes from "./routes/adminRoutes.js";
+import registerRoutes from "./routes/registerRoutes.js";
 
 const app = express();
 const PORT = 3000;
@@ -15,6 +16,7 @@ app.use('/user', userRoutes)
 app.use('/student', studentRoutes)
 app.use('/faculty', facultyRoutes)
 app.use('/admin', adminRoutes)
+app.use('/register', registerRoutes)
 
 
 app.listen(PORT, () => {

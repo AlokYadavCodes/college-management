@@ -6,6 +6,7 @@ const userSlice = createSlice({
         isLoggedIn: false,
         name: null,
         role: null,
+        userId: null,
     },
     reducers: {
         setIsLoggedIn: (state, action) => {
@@ -13,6 +14,12 @@ const userSlice = createSlice({
         },
         setRole: (state, action) => {
             state.role = action.payload.toLowerCase();
+        },
+        setUserId: (state, action) => {
+            state.userId = Number(action.payload);
+        },
+        setName: (state, action) => {
+            state.name = action.payload;
         }
     }
 })

@@ -1,81 +1,143 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
+import {Loading} from "../components/index.js";
+import {Link} from "react-router-dom";
+import {toast} from "react-toastify";
 
 const StudentRegistration = () => {
-    const [formData, setFormData] = useState({
-        name: '',
-        username: '',
-        email: '',
-        age: '',
-        grade: '',
-        phone: '',
-        dob: '',
-        address: '',
-        parentName: '',
-        parentPhone: '',
-    });
 
-    const [errors, setErrors] = useState({
+    const [loading, setLoading] = useState(true);
+    const [isRegistrationAllowed, setIsRegistrationAllowed] = useState(false);
+    const [departmentOptions, setDepartmentOptions] = useState([]);
+    const [department, setDepartment] = useState();
+
+    const [branchOptions, setBranchOptions] = useState([]);
+    const [branch, setBranch] = useState();
+
+    const formDataInitialState = {
         name: '',
         username: '',
+        password: '',
         email: '',
-        age: '',
-        grade: '',
-        phone: '',
+        contact_no: '',
         dob: '',
         address: '',
-        parentName: '',
-        parentPhone: '',
-    });
+        father_name: '',
+        parent_contact_no: '',
+        department_id: undefined,
+        branch_id: '',
+        semester_id: 1,
+    }
+
+    const [formData, setFormData] = useState(formDataInitialState);
+    const [errors, setErrors] = useState(formDataInitialState);
+
+    // is registration allowed
+    useEffect(() => {
+        setLoading(true);
+        fetch('/api/admin/is-reg-allowed')
+            .then(res => res.json())
+            .then(data => setIsRegistrationAllowed(data))
+            .catch(err => console.log(`Error in fetching is registration allowed: ${err.message}`))
+            .finally(() => setLoading(false));
+    }, [])
+
+
+// for fetching departments
+    useEffect(() => {
+        fetch('/api/register/departments')
+            .then(res => res.json())
+            .then(data => {
+                setDepartmentOptions(data)
+            })
+            .catch(err => console.log(`Error in fetching departments: ${err.message}`));
+    }, []);
+
+// for fetching branches
+    useEffect(() => {
+        if (!department) return;
+        fetch(`/api/register/branches/${department.id}`)
+            .then(res => res.json())
+            .then(data => {
+                setBranchOptions(data)
+            })
+            .catch(err => console.log(`Error in fetching branches: ${err.message}`));
+
+    }, [department]);
+
+    function handleDepartmentChange(e) {
+        const department = departmentOptions.find(department => department.name === e.target.value)
+        setDepartment(department)
+        setFormData((prev) => ({...prev, department_id: department.id}))
+    }
+
+    function handleBranchChange(e) {
+        const branch = branchOptions.find(branch => branch.name === e.target.value)
+        setBranch(branch)
+        setFormData((prev) => ({...prev, branch_id: branch.id}))
+    }
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const {name, value} = e.target;
+        validateField(name, value);
+
         setFormData((prevData) => ({
             ...prevData,
             [name]: value,
         }));
+
+        if (name === "username") {
+            fetch(`api/user/check-username/?${name}=${value}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.exists) {
+                        setErrors({...errors, username: 'Username already exists'})
+                    } else {
+                        setErrors({...errors, username: ''})
+                    }
+                })
+        } else if (name === "email") {
+            fetch(`api/user/check-email/?${name}=${value}`)
+                .then(res => res.json())
+                .then(data => {
+                    if (data.exists) {
+                        setErrors({...errors, email: 'Email already exists'})
+                    } else {
+                        setErrors({...errors, email: ''})
+                    }
+                })
+        }
     };
 
-    const handleUsernameChange = async (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-        try {
-            const res = await fetch(`api/user/check-username/?${name}=${value}`)
-            if(!res.ok){
-                console.log(`Check username response not ok: ${res.status}`)
-            }
-            const data= await res.json();
-            if(data.exists){
-                setErrors({...errors, username: 'Username already exists'})
-            }
-            else{
-                setErrors({...errors, username: ''})
-            }
-        } catch (error) {
-            console.log(`Error in checking username: ${error}`)
+    const validateField = (name, value) => {
+        const field = fields[name];
+        let error;
+        if (field.pattern && !field.pattern.test(value)) {
+            error = `Invalid ${field.label}`;
         }
-
-    }
+        if (field.required && !value) {
+            error = `${field.label} is required`;
+        } else {
+            error = '';
+        }
+        setErrors({...errors, [name]: error});
+    };
 
     const validateForm = () => {
         const newErrors = {};
-        if (!formData.name) newErrors.name = 'Name is required';
-        if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email))
-            newErrors.email = 'Valid email is required';
-        if (!formData.age || formData.age <= 0)
-            newErrors.age = 'Please enter a valid age';
-        if (!formData.grade) newErrors.grade = 'Grade is required';
-        if (!formData.phone || !/^\d{10}$/.test(formData.phone))
-            newErrors.phone = 'Phone number must be 10 digits';
-        if (!formData.dob) newErrors.dob = 'Date of birth is required';
-        if (!formData.address) newErrors.address = 'Address is required';
-        if (!formData.parentName) newErrors.parentName = 'Parent name is required';
-        if (!formData.parentPhone || !/^\d{10}$/.test(formData.parentPhone))
-            newErrors.parentPhone = 'Parent phone number must be 10 digits';
 
+        for (const key in fields) {
+            const value = formData[key];
+            const field = fields[key];
+
+            let error = "";
+            if (field.required && !value) {
+                newErrors[key] = `${field.label} is required`;
+            } else if (field.pattern && !field.pattern.test(value)) {
+                newErrors[key] = `Invalid ${field.label}`;
+            }
+        }
         setErrors(newErrors);
+
         return Object.keys(newErrors).length === 0;
     };
 
@@ -83,220 +145,174 @@ const StudentRegistration = () => {
         e.preventDefault();
         if (validateForm()) {
             try {
-                const res = await fetch('api/user/register', {
+                const res = await fetch('api/register/submit', {
                     method: 'POST',
                     headers: {
-                        ContentType: 'application/json',
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify(formData),
                 })
-                if(!res.ok){
-                    console.log(`Register response not ok: ${res.status}`)
+                if (!res.ok) {
+                    toast.error(`Register response not ok: ${res.status}`)
                 }
                 const data = await res.json()
-                console.log(data)
+                toast.success(data.message)
             } catch (error) {
-                console.log(`Error in registering user: ${error}`)
+                toast.error(`Error in registering user: ${error}`)
             }
-
-            setFormData({
-                name: '',
-                username: '',
-                email: '',
-                age: '',
-                grade: '',
-                phone: '',
-                dob: '',
-                address: '',
-                parentName: '',
-                parentPhone: '',
-            });
-            setErrors({});
+            setFormData(formDataInitialState);
+            setErrors(formDataInitialState);
+            setBranch(undefined);
+            setDepartment(undefined);
         }
     };
 
+    const fields = {
+        name: {label: "Name", type: "text", required: true},
+        username: {label: "Username", type: "text", required: true},
+        password: {label: "Password", type: "password", required: true},
+        email: {label: "Email", type: "email", required: true, pattern: /\S+@\S+\.\S+/},
+        contact_no: {label: "Phone Number", type: "text", required: true, pattern: /^\d{10}$/},
+        dob: {label: "Date of Birth", type: "date", required: true},
+        address: {label: "Address", type: "textarea", required: true},
+        father_name: {label: "Father's Name", type: "text", required: true},
+        parent_contact_no: {label: "Parent's Contact", type: "text", required: true, pattern: /^\d{10}$/},
+    };
+
     return (
-        <div className="min-h-screen bg-gradient-to-r from-blue-100 via-green-100 to-purple-100 flex items-center justify-center p-8">
-            <div className="bg-white rounded-xl shadow-xl p-8 max-w-4xl w-full">
-                <h2 className="bg-blue-700 rounded py-1 text-white text-3xl font-semibold text-center  mb-8">Student Registration</h2>
-                <form onSubmit={handleSubmit} className="space-y-8">
-                    {/* Personal Information Section */}
-                    <div>
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b-2 border-blue-300 pb-2">Personal Information</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
-                            <div>
-                                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={formData.name}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Email
-                                </label>
-                                <input
-                                    type="email"
-                                    id="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="dob" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Date of Birth
-                                </label>
-                                <input
-                                    type="date"
-                                    id="dob"
-                                    name="dob"
-                                    value={formData.dob}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.dob && <p className="text-red-500 text-xs mt-1">{errors.dob}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Phone Number
-                                </label>
-                                <input
-                                    type="text"
-                                    id="phone"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Username
-                                </label>
-                                <input
-                                    type="text"
-                                    id="username"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleUsernameChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.username && <p className="text-red-500 text-xs mt-1">{errors.username}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Address
-                                </label>
-                                <textarea
-                                    id="address"
-                                    name="address"
-                                    value={formData.address}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.address && <p className="text-red-500 text-xs mt-1">{errors.address}</p>}
+        loading
+            ?
+            <Loading/>
+            :
+            !isRegistrationAllowed
+                ?
+                <div className='flex item-center justify-center mt-32'>
+                    <div
+                        className="flex items-center justify-center w-[calc(60%)] bg-gradient-to-r from-blue-500 to-blue-700 text-white text-center p-6 rounded-lg shadow-lg">
+                        <div className="max-w-md w-full">
+                            <h1 className="text-2xl font-bold mb-4">
+                                Registration is Currently Closed
+                            </h1>
+                            <p className="text-base mb-4">
+                                Please check back later or contact the administration for more information.
+                            </p>
+                            <div className="mt-4">
+                                <Link
+                                    to='/login'
+                                    className="px-4 py-2 bg-white text-blue-600 font-medium rounded-md hover:bg-blue-200 transition">
+                                    Go to Home
+                                </Link>
                             </div>
                         </div>
                     </div>
+                </div>
 
-                    <hr className="border-gray-300 mb-8"/>
+                :
+                <div
+                    className="min-h-screen bg-gradient-to-r from-blue-100 via-green-100 to-purple-100 flex items-center justify-center p-8">
+                    <div className="bg-white rounded-xl shadow-xl p-8 max-w-4xl w-full">
+                        <h2 className="bg-blue-700 rounded py-1 text-white text-3xl font-semibold text-center mb-8">
+                            Student Registration
+                        </h2>
+                        <form onSubmit={handleSubmit} className="space-y-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                                {Object.keys(fields).map((key) => {
+                                    const field = fields[key];
+                                    return (
+                                        <div key={key}>
+                                            <label htmlFor={key}
+                                                   className="block text-sm font-medium text-gray-700 mb-2">
+                                                {field.label}
+                                            </label>
+                                            {field.type === "textarea" ? (
+                                                <textarea
+                                                    id={key}
+                                                    name={key}
+                                                    value={formData[key]}
+                                                    onChange={handleChange}
+                                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                />
+                                            ) : (
+                                                <input
+                                                    type={field.type}
+                                                    id={key}
+                                                    name={key}
+                                                    value={formData[key]}
+                                                    onChange={handleChange}
+                                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                                />
+                                            )}
+                                            {errors[key] && <p className="text-red-500 text-xs mt-1">{errors[key]}</p>}
+                                        </div>
+                                    );
+                                })}
 
-                    {/* Academic Information Section */}
-                    <div>
-                        <h3 className="text-xl font-semibold text-gray-800 mb-4 border-b-2 border-blue-300 pb-2">Academic
-                            Information</h3>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            <div>
-                                <label htmlFor="age" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Age
-                                </label>
-                                <input
-                                    type="number"
-                                    id="age"
-                                    name="age"
-                                    value={formData.age}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.age && <p className="text-red-500 text-xs mt-1">{errors.age}</p>}
+                                <div>
+                                    <label
+                                        htmlFor="department"
+                                        className="block text-sm font-medium text-gray-700 mb-2"
+                                    >
+                                        Department
+                                    </label>
+                                    <select
+                                        required
+                                        value={department?.name || ''}
+                                        onChange={handleDepartmentChange}
+                                        id="department"
+                                        name="department"
+                                        className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="" disabled>
+                                            Select department
+                                        </option>
+                                        {
+                                            departmentOptions.map((department) => (
+                                                <option key={department.id}
+                                                        value={department.name}>{department.name}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label
+                                        htmlFor="branch"
+                                        className="block text-sm font-medium text-gray-700 mb-2"
+                                    >
+                                        Branch
+                                    </label>
+                                    <select
+                                        required
+                                        value={branch?.name || ''}
+                                        onChange={handleBranchChange}
+                                        id="branch"
+                                        name="branch"
+                                        className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    >
+                                        <option value="" disabled>
+                                            Select branch
+                                        </option>
+                                        {
+                                            branchOptions.map((branch) => (
+                                                <option key={branch.id} value={branch.name}>{branch.name}</option>
+                                            ))
+                                        }
+                                    </select>
+                                </div>
+
                             </div>
-
-                            <div>
-                                <label htmlFor="grade" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Grade
-                                </label>
-                                <input
-                                    type="text"
-                                    id="grade"
-                                    name="grade"
-                                    value={formData.grade}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.grade && <p className="text-red-500 text-xs mt-1">{errors.grade}</p>}
+                            <div className="flex justify-center mt-8">
+                                <button
+                                    type="submit"
+                                    className="w-52 py-3 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-700 focus:outline-none transition-all"
+                                >
+                                    Register
+                                </button>
                             </div>
-
-                            <div>
-                                <label htmlFor="parentName" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Parent Name
-                                </label>
-                                <input
-                                    type="text"
-                                    id="parentName"
-                                    name="parentName"
-                                    value={formData.parentName}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.parentName && <p className="text-red-500 text-xs mt-1">{errors.parentName}</p>}
-                            </div>
-
-                            <div>
-                                <label htmlFor="parentPhone" className="block text-sm font-medium text-gray-700 mb-2">
-                                    Parent Phone Number
-                                </label>
-                                <input
-                                    type="text"
-                                    id="parentPhone"
-                                    name="parentPhone"
-                                    value={formData.parentPhone}
-                                    onChange={handleChange}
-                                    className="w-full p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                />
-                                {errors.parentPhone && <p className="text-red-500 text-xs mt-1">{errors.parentPhone}</p>}
-                            </div>
-                        </div>
+                        </form>
                     </div>
-
-                    {/* Submit Button */}
-                    <div className="flex justify-center mt-8">
-                        <button
-                            type="submit"
-                            className="w-52 py-3 bg-blue-600 text-white text-lg rounded-lg hover:bg-blue-700 focus:outline-none transition-all"
-                        >
-                            Register
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
+                </div>
     );
 };
 
-export default StudentRegistration;
+export default StudentRegistration

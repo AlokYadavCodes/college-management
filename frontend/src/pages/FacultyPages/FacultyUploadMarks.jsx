@@ -3,13 +3,13 @@ import React, {useEffect, useState} from "react";
 function FacultyUploadMarks() {
 
     const [branchOptions, setBranchOptions] = useState([]);
-    const [branchId, setBranchId] = useState(0);
+    const [branch, setBranch] = useState();
 
     const [semesterOptions, setSemesterOptions] = useState([]);
-    const [semesterId, setSemesterId] = useState("");
+    const [semester, setSemester] = useState();
 
     const [subjectOptions, setSubjectOptions] = useState([]);
-    const [subjectId, setSubjectId] = useState(0);
+    const [subject, setSubject] = useState();
 
     const [students, setStudents] = useState([
         {id: 1, name: "Student A", roll: "101", marks: ""},
@@ -18,6 +18,7 @@ function FacultyUploadMarks() {
     ]);
     const [searchQuery, setSearchQuery] = useState("");
 
+    // for branch options
     useEffect(() => {
         fetch('/api/faculty/branches', {
             method: 'POST',
@@ -29,8 +30,93 @@ function FacultyUploadMarks() {
             })
         })
             .then(res => res.json())
-            .then((data) => setBranchOptions(data))
-    })
+            .then((data) => {
+                setBranchOptions(data)
+            })
+            .catch(err => console.log(`Error in fetching branches: ${err.message}`))
+    }, [])
+
+    // for semester options
+    useEffect(() => {
+        if (!branch) return;
+        fetch('/api/faculty/semesters', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                branchId: 1,
+                userId: 3
+            })
+        })
+            .then(res => res.json())
+            .then((data) => setSemesterOptions(data))
+            .catch(err => console.log(`Error in fetching semesters: ${err.message}`))
+    }, [branch])
+
+    // for subject options
+    useEffect(() => {
+        if (!branch || !semester) return;
+
+        fetch('/api/faculty/subjects', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: 3,
+                branchId: branch.id,
+                semesterId: semester.id
+            })
+        })
+            .then(res => res.json())
+            .then((data) => setSubjectOptions(data))
+            .catch(err => console.log(`Error in fetching subjects: ${err.message}`))
+    }, [branch, semester])
+
+    // for fetching students
+    useEffect(() => {
+        if (!branch || !semester || !subject) {
+            console.log(`returned from fetch students`)
+            return;
+        }
+        fetch('/api/faculty/students', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: 3,
+                branchId: 2,
+                semesterId: 3,
+                subjectId: 11,
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                setStudents(data)
+                console.log(data)
+            })
+            .catch(err => console.log(`Error in fetching students: ${err.message}`))
+    }, [branch, semester, subject])
+
+    const handleBranchChange = (e) => {
+        const name = e.target.value;
+        const branch = branchOptions.find((branch) => branch.name === name)
+        setBranch(branch)
+    }
+
+    const handleSemesterChange = (e) => {
+        const number = Number(e.target.value);
+        const semester = semesterOptions.find((semester) => semester.number === number)
+        setSemester(semester)
+    }
+
+    const handleSubjectChange = (e) => {
+        const name = e.target.value;
+        const subject = subjectOptions.find((subject) => subject.name === name)
+        setSubject(subject)
+    }
 
     const handleMarksChange = (studentId, marks) => {
         setStudents((prev) =>
@@ -41,6 +127,14 @@ function FacultyUploadMarks() {
     };
 
     const handleSubmitMarks = () => {
+        // fetch('/api/faculty/upload-marks', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify()
+        // })
+
         console.log("Uploaded Marks:", students);
         alert("Marks uploaded successfully!");
     };
@@ -49,8 +143,7 @@ function FacultyUploadMarks() {
         student.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
-    // Check if all options are selected
-    const isFormValid = branch && semester && subject;
+    const isFormValid = true
 
     return (
         <div className="min-h-screen bg-gray-100 p-6">
@@ -70,14 +163,16 @@ function FacultyUploadMarks() {
                             </label>
                             <select
                                 id="branch"
-                                value={branch}
-                                onChange={(e) => setBranch(e.target.value)}
+                                value={branch?.name || ''}
+                                onChange={handleBranchChange}
                                 className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                             >
                                 <option value="">-- Select Branch --</option>
-                                <option value="CSE">Computer Science</option>
-                                <option value="ECE">Electronics</option>
-                                <option value="MECH">Mechanical</option>
+                                {
+                                    branchOptions.map((branch) => (
+                                        <option key={branch.id} value={branch.name}>{branch.name}</option>
+                                    ))
+                                }
                             </select>
                         </div>
 
@@ -88,15 +183,16 @@ function FacultyUploadMarks() {
                             </label>
                             <select
                                 id="semester"
-                                value={semester}
-                                onChange={(e) => setSemester(e.target.value)}
+                                value={semester?.number}
+                                onChange={handleSemesterChange}
                                 className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                             >
                                 <option value="">-- Select Semester --</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
-                                <option value="4">4</option>
+                                {
+                                    semesterOptions.map((semester) => (
+                                        <option key={semester.id} value={semester.number}>{semester.number}</option>
+                                    ))
+                                }
                             </select>
                         </div>
 
@@ -107,14 +203,16 @@ function FacultyUploadMarks() {
                             </label>
                             <select
                                 id="subject"
-                                value={subject}
-                                onChange={(e) => setSubject(e.target.value)}
+                                value={subject?.name}
+                                onChange={handleSubjectChange}
                                 className="w-full max-w-md p-2 border rounded-lg focus:outline-none focus:ring focus:ring-blue-300"
                             >
                                 <option value="">-- Select Subject --</option>
-                                <option value="Math">Math</option>
-                                <option value="Physics">Physics</option>
-                                <option value="Chemistry">Chemistry</option>
+                                {
+                                    subjectOptions.map((subject) => (
+                                        <option key={subject.id} value={subject.name}>{subject.name}</option>
+                                    ))
+                                }
                             </select>
                         </div>
                     </div>
@@ -149,7 +247,7 @@ function FacultyUploadMarks() {
                                 <tbody>
                                 {filteredStudents.map((student) => (
                                     <tr key={student.id} className="border-b hover:bg-gray-50">
-                                        <td className="px-4 py-2 border">{student.roll}</td>
+                                        <td className="px-4 py-2 border">{student.id}</td>
                                         <td className="px-4 py-2 border">{student.name}</td>
                                         <td className="px-4 py-2 border">
                                             {student.marks !== "" ? (
