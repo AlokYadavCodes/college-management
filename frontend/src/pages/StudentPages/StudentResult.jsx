@@ -6,7 +6,7 @@ function StudentResult() {
     const [loading, setLoading] = useState(true);
     const [semester, setSemester] = useState(1);
     const [options, setOptions] = useState([1]);
-    const userId = useSelector(state => state.user.id)
+    const {userId} = useSelector(state => state.user)
     const [result, setResult] = useState({
         subjects: [{
             name: null,
@@ -29,7 +29,7 @@ function StudentResult() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: 1
+                userId,
             })
         })
             .then(res => res.json())
@@ -52,8 +52,8 @@ function StudentResult() {
                         'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
-                        userId: 1,
-                        semester
+                        userId,
+                        semester,
                     })
                 })
                 if (!res.ok) {
@@ -111,7 +111,7 @@ function StudentResult() {
                         </div>
                         <div className="flex justify-between">
                             <p className="text-gray-500 font-medium">Result Status</p>
-                            <p className="text-green-600 font-bold">{result.resultStatus}</p>
+                            <p className={`font-bold ${result.resultStatus?.toLowerCase()?.trim() === 'fail' ? 'text-red-600' : 'text-green-600'}`}>{result.resultStatus}</p>
                         </div>
                     </div>
                 </div>
@@ -129,7 +129,7 @@ function StudentResult() {
                         </div>
                         <div className="flex justify-between">
                             <p className="text-gray-500 font-medium">Percentage</p>
-                            <p className="text-blue-600 font-bold">{result.percentage}%</p>
+                            <p className="text-blue-600 font-bold">{result.percentage?.toFixed(2)}%</p>
                         </div>
                     </div>
                 </div>
@@ -150,11 +150,12 @@ function StudentResult() {
                         <tbody>
                         {
                             result.subjects.map(subject => (
-                                <tr key={subject.name} className="bg-white border-b hover:bg-gray-50">
+                                <tr key={subject.name}
+                                    className={`${subject.resultStatus?.toLowerCase() === 'fail' ? 'bg-red-200 hover:bg-red-100' : 'bg-white border-b hover:bg-gray-50'}`}>
                                     <td className="px-6 py-4 text-gray-800">{subject.name}</td>
                                     <td className="px-6 py-4">{subject.maxMarks}</td>
                                     <td className="px-6 py-4">{subject.obtainedMarks}</td>
-                                    <td className="px-6 py-4 text-green-600">{subject.resultStatus}</td>
+                                    <td className={`px-6 py-4 ${subject.resultStatus?.toLowerCase() === 'fail' ? 'text-red-600' : 'text-green-600'}`}>{subject.resultStatus}</td>
                                 </tr>
                             ))
                         }

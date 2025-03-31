@@ -1,12 +1,32 @@
 import db from '../db/dbConnection.js'
 
+const getBranchId = async (userId) => {
+    const [rows] = await db.execute(`SELECT s.branch_id
+                                     FROM students s
+                                              JOIN users u on u.id = s.user_id
+                                     WHERE u.id = ?
+    `, [userId])
+
+    return rows[0].branch_id;
+}
+
+const getSemesterId = async (userId) => {
+    const [rows] = await db.execute(`SELECT s.semester_id
+                                     FROM students s
+                                              JOIN users u on u.id = s.user_id
+                                     WHERE u.id = ?
+    `, [userId])
+
+    return rows[0].semester_id;
+}
+
 export const getSemestersArr = async (userId) => {
     const [rows] = await db.execute(`SELECT sem.semester_number
                                      FROM users u
                                               JOIN students s on s.user_id = u.id
                                               JOIN semesters sem on sem.id = s.semester_id
                                      WHERE u.id = ?`, [userId])
-    return Array.from({length: rows[0].semester_number - 1}, (_, i) => i + 1);
+    return Array.from({length: rows[0].semester_number}, (_, i) => i + 1);
 
 }
 
@@ -58,4 +78,47 @@ export const getStudentProfile = async (userId) => {
                                      WHERE u.id = ?
     `, [userId])
     return rows[0];
+}
+
+export const getStudentMaterials = async (userId) => {
+    const branchId = await getBranchId(userId);
+    const semesterId = await getSemesterId(userId);
+    try {
+        const [rows] = await db.execute(`SELECT m.title,
+                                                m.description,
+                                                m.created_at as createdAt,
+                                                u.name       as createdBy
+                                         FROM materials m
+                                                  JOIN users u ON u.id = m.created_by
+                                         WHERE m.branch_id = ?
+                                           AND m.semester_id = ?
+        `, [branchId, semesterId])
+        console.log(rows)
+        return rows;
+    } catch (error) {
+        console.log(`error in fetching student materials: ${error}`);
+    }
+}
+
+export const getStudentSubjects = async (userId) => {
+    const branchId = await getBranchId(userId);
+    const semesterId = await getSemesterId(userId);
+    try {
+        const [rows] = await db.execute(`SELECT sub.id AS id, sub.name AS name, u.name AS faculty, f.id AS facultyId
+                                         FROM subjects sub
+                                                  JOIN branch_semester_subjects bss ON bss.subject_id = sub.id
+                                                  JOIN faculty_teaches ft ON ft.branch_semester_subject_id = bss.id
+                                                  JOIN faculties f ON f.id = ft.faculty_id
+                                                  JOIN users u on u.id = f.user_id
+                                         WHERE bss.branch_id = ?
+                                           AND bss.semester_id = ?
+
+        `, [branchId, semesterId])
+        console.log(rows)
+        return rows;
+
+    } catch (error) {
+        console.log(`error in fetching students subjects : ${error}`)
+    }
+
 }

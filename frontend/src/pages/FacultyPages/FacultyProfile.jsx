@@ -1,5 +1,6 @@
 import {Loading, Profile} from "../../components/index.js";
 import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
 
 function FacultyProfile() {
     const [loading, setLoading] = useState(true);
@@ -11,6 +12,7 @@ function FacultyProfile() {
         contactNo: null,
         parentContactNo: null,
     })
+    const {userId} = useSelector(state => state.user)
     useEffect(() => {
         setLoading(true)
         fetch('/api/faculty/profile', {
@@ -19,7 +21,7 @@ function FacultyProfile() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: 1
+                userId,
             })
         })
             .then(res => res.json())
@@ -28,7 +30,7 @@ function FacultyProfile() {
             })
             .catch(err => console.log(`Error in fetching profile: ${err.message}`))
             .finally(() => setLoading(false))
-    }, [])
+    }, [userId])
     return loading ? <Loading/> : (
         <>
             <Profile profile={profile}/>

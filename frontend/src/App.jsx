@@ -22,7 +22,7 @@ import {
     StudentRegistration,
     StudentDashboard,
     AdminDashboard,
-    PendingRegistrationRequest,
+    PendingRegistrationRequest, StudentSubjects, FacultyDashboard, FacultyClasses,
 } from "./pages/index.js";
 import {useSelector} from "react-redux";
 import {ToastContainer} from "react-toastify";
@@ -47,22 +47,25 @@ function App() {
                 <Route path='/register'
                        element={<StudentRegistration/>}/>
                 <Route path='/student' element={<PrivateRoute allowedRoles={["student"]}> <Layout/> </PrivateRoute>}>
-                    <Route index element={<Navigate to="profile" replace/>}/>
+                    <Route index element={<Navigate to="dashboard" replace/>}/>
                     <Route path='dashboard' element={<StudentDashboard/>}/>
                     <Route path='profile' element={<StudentProfile/>}/>
                     <Route path="time-table" element={<StudentTimeTable/>}/>
                     <Route path="result" element={<StudentResult/>}/>
                     <Route path="material" element={<StudentMaterial/>}/>
                     <Route path="notice" element={<StudentNotice/>}/>
+                    <Route path="subjects" element={<StudentSubjects/>}/>
                 </Route>
 
                 <Route path='/faculty' element={<PrivateRoute allowedRoles={["faculty"]}> <Layout/> </PrivateRoute>}>
-                    <Route index element={<Navigate to="profile" replace/>}/>
+                    <Route index element={<Navigate to="dashboard" replace/>}/>
+                    <Route path="dashboard" element={<FacultyDashboard/>}/>
                     <Route path="profile" element={<FacultyProfile/>}/>
                     <Route path="upload-marks" element={<FacultyUploadMarks/>}/>
                     <Route path="upload-material" element={<FacultyUploadMaterial/>}/>
                     <Route path="time-table" element={<FacultyTimeTable/>}/>
                     <Route path="notice" element={<FacultyNotice/>}/>
+                    <Route path="classes" element={<FacultyClasses/>}/>
                 </Route>
 
                 <Route path='/admin' element={<PrivateRoute allowedRoles={["admin"]}> <Layout/> </PrivateRoute>}>

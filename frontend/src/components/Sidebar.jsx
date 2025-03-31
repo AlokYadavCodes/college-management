@@ -1,5 +1,6 @@
 import {useState} from "react";
 import {NavLink} from "react-router-dom";
+import {userActions} from "../store/user.js";
 import {
     FaUser,
     FaTable,
@@ -11,11 +12,18 @@ import {
     FaUsers,
     FaUniversity
 } from 'react-icons/fa';
-import {useSelector} from "react-redux";
+import {MdDashboard} from "react-icons/md";
+import {RiFileUploadLine} from "react-icons/ri";
+import {PiExamFill} from "react-icons/pi";
+import {LiaChalkboardTeacherSolid} from "react-icons/lia";
+
+import {useDispatch, useSelector} from "react-redux";
 
 function Sidebar() {
     const [isOpen, setIsOpen] = useState(false);
     const {role} = useSelector((state) => state.user);
+    const dispatch = useDispatch();
+    const {setIsLoggedIn} = userActions;
 
     const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -23,29 +31,35 @@ function Sidebar() {
     let tabs = [];
     if (role === "student") {
         tabs = [
+            {name: 'Dashboard', slug: 'dashboard', icon: <MdDashboard className="text-xl"/>},
             {name: 'Profile', slug: 'profile', icon: <FaUser className="text-xl"/>},
             {name: 'Time Table', slug: 'time-table', icon: <FaTable className="text-xl"/>},
-            {name: 'Result', slug: 'result', icon: <FaClipboardList className="text-xl"/>},
+            {name: 'Result', slug: 'result', icon: <PiExamFill className="text-xl"/>},
             {name: 'Material', slug: 'material', icon: <FaFileAlt className="text-xl"/>},
             {name: 'Notice', slug: 'notice', icon: <FaBullhorn className="text-xl"/>},
         ];
     } else if (role === "faculty") {
         tabs = [
+            {name: 'Dashboard', slug: 'dashboard', icon: <MdDashboard className="text-xl"/>},
             {name: 'Profile', slug: 'profile', icon: <FaUser className="text-xl"/>},
-            {name: 'Upload Marks', slug: 'upload-marks', icon: <FaUpload className="text-xl"/>},
-            {name: 'Upload Material', slug: 'upload-material', icon: <FaUpload className="text-xl"/>},
+            {name: 'Upload Marks', slug: 'upload-marks', icon: <PiExamFill className="text-xl"/>},
+            {name: 'Upload Material', slug: 'upload-material', icon: <RiFileUploadLine className="text-xl"/>},
             {name: 'Time Table', slug: 'time-table', icon: <FaTable className="text-xl"/>},
             {name: 'Notice', slug: 'notice', icon: <FaBullhorn className="text-xl"/>},
         ];
     } else if (role === "admin") {
         tabs = [
-            {name: 'Dashboard', slug: 'dashboard', icon: <FaUser className="text-xl"/>},
+            {name: 'Dashboard', slug: 'dashboard', icon: <MdDashboard className="text-xl"/>},
             {name: 'Profile', slug: 'profile', icon: <FaUser className="text-xl"/>},
             {name: 'Students', slug: 'students', icon: <FaUsers className="text-xl"/>},
-            {name: 'Faculties', slug: 'faculties', icon: <FaUniversity className="text-xl"/>},
+            {name: 'Faculties', slug: 'faculties', icon: <LiaChalkboardTeacherSolid className="text-xl"/>},
             {name: 'Time Table', slug: 'time-table', icon: <FaTable className="text-xl"/>},
             {name: 'Upload Notice', slug: 'notice', icon: <FaBullhorn className="text-xl"/>},
         ];
+    }
+
+    function handleLogoutClick() {
+        dispatch(setIsLoggedIn(false))
     }
 
     return (
@@ -88,7 +102,8 @@ function Sidebar() {
                 {/* Sidebar footer with Logout */}
                 <div className="mt-auto">
                     <NavLink
-                        to="/logout"
+                        to='/'
+                        onClick={handleLogoutClick}
                         className={({isActive}) =>
                             `flex items-center w-full text-lg p-3 rounded-lg transition-all duration-300 ${
                                 isActive ? 'bg-red-600 text-white' : 'text-red-200 hover:bg-red-500'

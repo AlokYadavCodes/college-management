@@ -1,5 +1,6 @@
 import {Loading, Profile} from "../../components/index.js";
 import {useEffect, useState} from "react";
+import {useSelector} from "react-redux";
 
 function AdminProfile() {
     const [loading, setLoading] = useState(true);
@@ -11,6 +12,9 @@ function AdminProfile() {
         contactNo: null,
         parentContactNo: null,
     })
+
+    const {userId} = useSelector(state => state.user)
+
     useEffect(() => {
         setLoading(true)
         fetch('/api/admin/profile', {
@@ -19,7 +23,7 @@ function AdminProfile() {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                userId: 2
+                userId,
             })
         })
             .then(res => res.json())
@@ -28,7 +32,7 @@ function AdminProfile() {
             })
             .catch(err => console.log(`Error in fetching profile: ${err.message}`))
             .finally(() => setLoading(false))
-    }, [])
+    }, [userId])
     return loading ? <Loading/> : (
         <>
             <Profile profile={profile}/>

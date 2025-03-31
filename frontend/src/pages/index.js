@@ -19,8 +19,14 @@ import StudentRegistration from "./StudentRegistration.jsx";
 import StudentDashboard from "./StudentPages/StudentDashboard.jsx";
 import AdminDashboard from "./AdminPages/AdminDashboard.jsx";
 import PendingRegistrationRequest from "./AdminPages/PendingRegistrationRequest.jsx";
+import StudentSubjects from "./StudentPages/StudentSubjects.jsx";
+import FacultyDashboard from "./FacultyPages/FacultyDashboard.jsx";
+import FacultyClasses from "./FacultyPages/FacultyClasses.jsx";
 
 export {
+    FacultyClasses,
+    FacultyDashboard,
+    StudentSubjects,
     AdminDashboard,
     StudentDashboard,
     StudentRegistration,

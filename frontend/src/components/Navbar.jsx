@@ -1,16 +1,21 @@
-import { useState } from "react";
-import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import {useState} from "react";
+import {FaSignOutAlt} from 'react-icons/fa';
+import {userActions} from "../store/user.js";
+import {useDispatch, useSelector} from "react-redux";
+import {Link} from "react-router-dom";
 
 function Navbar() {
     const [dropdownOpen, setDropdownOpen] = useState(false);
+    const {setIsLoggedIn} = userActions
+    const {name, role} = useSelector(state => state.user)
+    const dispatch = useDispatch();
 
     const toggleDropdown = () => {
         setDropdownOpen(!dropdownOpen);
     };
 
     const handleLogout = () => {
-        console.log("Logout clicked");
-        // Add your logout logic here
+        dispatch(setIsLoggedIn(false));
     };
 
     return (
@@ -27,38 +32,39 @@ function Navbar() {
                 </div>
 
                 {/* Right Side: Profile */}
-                <div className="relative">
+                <div className="relative z-10">
                     <button
                         type="button"
                         onClick={toggleDropdown}
                         className="flex items-center focus:outline-none transition-transform hover:scale-105"
                     >
                         <img
-                            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                            src="https://i.pinimg.com/736x/3f/9f/5b/3f9f5b8c9f31ce16c79d48b9eeda4de0.jpg"
                             alt="User Profile"
                             className="w-10 h-10 rounded-full border border-gray-300 shadow-md"
                         />
                     </button>
 
                     {dropdownOpen && (
-                        <div className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-lg shadow-xl border border-gray-700">
+                        <div
+                            className="absolute right-0 mt-2 w-48 bg-gray-800 text-white rounded-lg shadow-xl border border-gray-700">
                             {/* Profile Option */}
-                            <a
-                                href="/profile"
+                            <Link
+                                to={`/${role}/profile`}
                                 className="block px-4 py-2 text-gray-200 font-medium rounded-t-lg hover:bg-gray-700 transition-all duration-200 hover:text-blue-400"
                             >
-                                <button className="w-full text-left">Profile</button>
-                            </a>
+                                <button className="w-full text-left">{name}</button>
+                            </Link>
 
                             {/* Divider */}
-                            <hr className="border-gray-700" />
+                            <hr className="border-gray-700"/>
 
                             {/* Logout Option */}
                             <button
                                 onClick={handleLogout}
                                 className="w-full text-left px-4 py-2 bg-red-600 text-white rounded-b-lg hover:bg-red-700 focus:outline-none transition-all duration-200 hover:shadow-lg"
                             >
-                                <FaSignOutAlt className="inline mr-2" />
+                                <FaSignOutAlt className="inline mr-2"/>
                                 Logout
                             </button>
                         </div>
